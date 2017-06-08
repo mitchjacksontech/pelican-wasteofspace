@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js ie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 8)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatable" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+    {% for meta_name, meta_content in METADATA %}
+	<meta name="{{ meta_name }}" content="{{ meta_content }}">
+    {% endfor %}
+
+    {% block opengraph %}
+    <meta property="og:type"        content="{{ OG_TYPE }}">
+    <meta property="og:title"       content="{{ SITENAME }}">
+    <meta property="og:description" content="{{ OG_DESCRIPTION|striptags|escape }}">
+    <meta property="og:image"       content="{{ OG_IMAGE }}">
+    <meta property="og:site_name"   content="{{ OG_SITE_NAME }}">
+    {% endblock opengraph %}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/theme/css/default.css">
+    <link rel="stylesheet" href="/theme/css/media.css">
+</head>
+
+<body>
+
+<!-- header -->
+<div class="container-fluid header">
+    <div class="row">
+
+        <!-- left column -->
+        <div class="col-xs-12 col-sm-2">
+            <a href="{{ SITEURL }}/">
+            <img src="{{ HEADER_IMAGE }}"
+                 alt="{{ SITENAME }}"
+                 class="img-responsive img-rounded header-img">
+            </a>
+        </div>
+
+        <!-- right column -->
+        <div class="col-xs-12 col-sm-10">
+            <div class="row">
+
+                <div class="col-xs-12 sitename">
+                    <a href="{{ SITEURL }}/">{{ SITENAME }}</a>
+                </div>
+
+                <div class="col-xs-12 sitesubtitle">
+                    {{ SITESUBTITLE }}
+                </div>
+
+                <div class="col-xs-12">
+                    <ul class="topnav">
+                        <li><a href="{{ SITEURL }}/">Home</a></li>
+                        {% for title, link in MENUITEMS %}
+                        <li><a href="{{ link }}">{{ title }}</a></li>
+                        {% endfor %}
+                        {% if DISPLAY_CATEGORIES_ON_MENU %}
+                            {% for cat, null in categories %}
+                            <li><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                        {% if DISPLAY_PAGES_ON_MENU %}
+                            {% for p in pages %}
+                            <li><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+
+                {% if SOCIAL %}
+                <div class="col-xs-12 topnav-social text-center">
+                    {% for label, url in SOCIAL %}
+                    <a href="{{ url }}"><i class="fa fa-{{ label }}"></i></a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div><!-- /row for right-column -->
+        </div><!-- /col-xs-10 for right-column -->
+    </div><!-- /row for header -->
+</div><!-- /container-flex for header -->
+
+{% if DISPLAY_TAGS_ON_HEADER %}
+<!-- Tag Navigation Bar -->
+<div class="container-fluid">
+    <div class="row header-tags">
+        <div class="col-xs-1"> </div>
+        <div class="col-xs-10 nav-tags text-center">
+            <div class="row">
+            {% for tag, articles in tags|sort_by_article_count %}
+            <div class="col-xs-6 col-sm-2"><a href="{{ SITEURL }}/{{ tag.url }}"><span class="hash">#</span>{{ tag }}<span class="hash">[{{articles|count}}]</span></a></div>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="col-xs-1"> </div>
+    </div><!-- /row -->
+</div><!-- /container-flex for tags -->
+{% endif %}
+
+<!-- page content block -->
+<div class="container">
+{% block content %}{% endblock %}
+</div><!-- /container for content -->
+
+<!-- footer -->
+<div class="container-flex footer">
+    <div class="row footer-inner">
+        <div class="col-xs-12 col-sm-6 footer-left">
+            <a href="{{ SITEURL }}/">Home</a><br>
+            <a href="{{ SITEURL }}/tags.html">Tags</a><br>
+            {% for title, link in MENUITEMS %}
+            <a href="{{ link }}">{{ title }}</a><br>
+            {% endfor %}
+            {% if DISPLAY_CATEGORIES_ON_MENU %}
+                {% for cat, null in categories %}
+                <a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a><br>
+                {% endfor %}
+            {% endif %}
+            {% if DISPLAY_PAGES_ON_MENU %}
+                {% for p in pages %}
+                <a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a><br>
+                {% endfor %}
+            {% endif %}
+        </div><!-- /left col -->
+
+        <div class="col-xs-12 col-sm-6 footer-right">
+            {% if COPYRIGHT_SLUG %}
+            &copy; {{ COPYRIGHT_SLUG }}<br>
+            {% else %}
+            &copy; {{ SITENAME }}<br>
+            {% endif %}
+            {% if LINKS %}
+            <br>
+            {{ LINKS_TITLE }}<br>
+            {% for label, url in LINKS %}
+                <a href="{{ url }}">{{ label }}</a><br>
+            {% endfor %}
+            {% endif %}
+        </div><!-- /right col -->
+    </div><!-- /row -->
+</div><!-- /container-flex footer -->
+
+</body>
+</html>

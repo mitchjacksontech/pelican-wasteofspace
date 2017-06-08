@@ -1,0 +1,6 @@
+{% extends 'index.html' %}
+{% block content %}
+{% for tag, articles in tags |sort_by_article_count %}
+<h1 class="tag-header"><a href="{{ tag.url }}">#{{ tag }}</a></h1>
+{% endfor %}
+{% endblock content %}

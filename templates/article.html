@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block head %}
+  {{ super() }}
+  {% if article.description %}
+    <meta name="description" content="{{ article.description }}" />
+  {% endif %}
+
+  {% block opengraph %}
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ article.title|striptags|escape }}">
+  {% if article.description %}
+  <meta property="og:description" content="dd{{ article.description|striptags|escape }}">
+  {% elif article.summary %}
+  <meta property="og:description" content="ee{{ article.summary|striptags|escape }}">
+  {% endif %}
+  {% if article.og_image %}
+  <meta property="og:image" content="{{ article.og_image }}">
+  {% endif %}
+  {% endblock opengraph %}
+
+  {% for tag in article.tags %}
+    <meta name="tags" content="{{tag}}" />
+  {% endfor %}
+
+{% endblock %}
+
+{% block content %}
+<article class="container entry">
+    <header class="entry-header">
+        <div class="entry-title">
+            <a href="{{ SITEURL }}/{{ article.url }}"
+               rel="bookmark"
+               title="{{ article.title|striptags }}">{{ article.title }}</a>
+        </div>
+ {% import 'translations.html' as translations with context %}
+ {{ translations.translations_for(article) }}
+         <div class="entry-meta">
+             From <a href="{{ SITEURL }}/category/{{ article.category }}.html"
+                     title="Posts in category: {{ article.category }}"
+                     rel="category tag">{{ article.category }}</a> dated {{ article.locale_date }}<br>
+             {% for tag in article.tags|sort %}
+             <a href="{{ SITEURL }}/tag/{{ tag }}.html">#{{ tag }}</a>
+             {% endfor %}
+         </div>
+     </header>
+
+     <div class="entry-content">
+         <div class="row">
+<!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+             <div class="col-xs-12 entry-content">{{ article.content }}</div>
+<!--  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  -->
+         </div>
+     </div>
+</article>
+{% endblock content %}

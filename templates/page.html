@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }}{%endblock%}
+{% block head %}
+  {{ super() }}
+  {% if page.description %}
+    <meta name="description" content="{{ article.description|striptags|escape }}" />
+  {% endif %}
+
+  {% block opengraph %}
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ page.title|striptags }}">
+  {% if page.description %}
+  <meta property="og:description" content="{{ page.description|striptags }}">
+  {% elif page.summary %}
+  <meta property="og:description" content="{{ page.summary|striptags }}">
+  {% endif %}
+  {% if page.og_image %}
+  <meta property="og:image" content="{{ page.og_image }}">
+  {% endif %}
+  {% endblock opengraph %}
+
+  {% for tag in page.tags %}
+    <meta name="tags" content="{{tag}}" />
+  {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="container page">
+    <h1 class="text-center">{{ page.title }}</h1>
+
+    <article class="container page">
+        {% import 'translations.html' as translations with context %}
+        {{ translations.translations_for(page) }}
+
+<!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+        {{ page.content }}
+<!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+    </article>
+</div>
+{% endblock content %}
